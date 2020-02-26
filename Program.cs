@@ -27,6 +27,30 @@ namespace InvestmentGrowthEstimator
             return inputAsDouble;
         }
 
+        //purpose: use console to request input from user. converts input from string to integer
+        //parameters: string consoleMsg - the input request message to display to the user.
+        //            string errorMsg - error message in case user input fails validation
+        //returns: user input converted to an integer
+        public static int requestUserInputInt(string consoleMsg, string errorMsg)
+        {
+            int inputAsInt;
+            while (true)
+            {
+                Console.Write(consoleMsg);
+                string input = Console.ReadLine().Trim();
+                if (!int.TryParse(input, out inputAsInt) || inputAsInt < 0)
+                {
+                    Console.WriteLine(errorMsg);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return inputAsInt;
+        }
+
         //purpose: Estimate investment growth over a number of years
         static void Main(string[] args)
         {
@@ -42,6 +66,9 @@ namespace InvestmentGrowthEstimator
 
             //obtain and validate user input for growth rate
             double annualGrowthRate = requestUserInputDouble("Enter annual growth rate (1.07 would be a growth rate of 7%): ", errorMsg);
+
+            //obtain and validate user input for number of years
+            int numberOfYears = requestUserInputInt("Enter the number of years: ", errorMsg);
             
             int i = 0;
             string columnHeaders = "Year     Balance";
@@ -52,7 +79,7 @@ namespace InvestmentGrowthEstimator
 
             Console.WriteLine(columnHeaders);
             Console.WriteLine(i+ blankSpaces + balance);
-            for (++i; i <= 10; i++)
+            for (++i; i <= numberOfYears; i++)
             {
                 balance = (balance + annualContribution) * annualGrowthRate;
                 blankSpaces = "".PadRight(secondColumnIndex - i.ToString().Length);
